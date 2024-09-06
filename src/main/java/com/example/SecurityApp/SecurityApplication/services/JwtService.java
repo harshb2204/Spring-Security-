@@ -36,7 +36,7 @@ public class JwtService {
      * @param user the user for whom the token is being generated
      * @return a JWT token as a string
      */
-    public String generateToken(User user){
+    public String generateAccessToken(User user){
         // Create a JWT token with the specified claims and settings
         return Jwts.builder()
                 // Set the subject of the token to the user's ID
@@ -47,10 +47,26 @@ public class JwtService {
                 // Set the token's issued date to the current date and time
                 .issuedAt(new Date())
                 // Set the token's expiration date to 1 hour from the current time
-                .expiration(new Date(System.currentTimeMillis()* 1000*60))
+                .expiration(new Date(System.currentTimeMillis()+ 1000*20))
                 // Sign the token with the secret key
                 .signWith(getSecretKey())
                 // Build the compact string representation of the token
+                .compact();
+    }
+    public String generateRefreshToken(User user){
+
+        return Jwts.builder()
+
+                .subject(user.getId().toString())
+
+
+
+                .issuedAt(new Date())
+
+                .expiration(new Date(System.currentTimeMillis()+  1000L *60*24*30*6))
+
+                .signWith(getSecretKey())
+
                 .compact();
     }
 
